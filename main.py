@@ -6,11 +6,12 @@ from sqlalchemy import *
 from sqlalchemy import exc
 from sqlalchemy.orm import sessionmaker
 from models import Apartment, base
+import database_config as config
 
 
 if __name__ == '__main__':
 
-    engine = create_engine("postgresql://postgres:password@localhost:5432/dataOx")
+    engine = create_engine(f"postgresql://{config.user}:{config.password}@{config.host}:{config.port}/{config.db_name}")
     base.metadata.create_all(engine)
 
     page = 1
