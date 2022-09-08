@@ -16,3 +16,7 @@ database dump - apartment_db.sql
 
 change ```example_database_config.py``` to ```database_config.py``` with your PostgreSQL configurations
 
+
+
+Google Sheets: 
+https://docs.google.com/spreadsheets/d/1f3LqfLhY7z3OgcYyQRsTkgI8Pz4AbaKnM4UYOl1mvKk/edit?usp=sharing
