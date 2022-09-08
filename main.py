@@ -11,7 +11,8 @@ import database_config as config
 
 if __name__ == '__main__':
 
-    engine = create_engine(f"postgresql://{config.user}:{config.password}@{config.host}:{config.port}/{config.db_name}")
+    engine = create_engine(
+        f"postgresql://{config.user}:{config.password}@{config.host}:{config.port}/{config.db_name}")
 
     base.metadata.create_all(engine)
 
@@ -20,10 +21,12 @@ if __name__ == '__main__':
     while True:
 
         if page == 1:
-            response = requests.get(f'https://www.kijiji.ca/b-apartments-condos/city-of-toronto/page-{page}/c37l1700273')
+            response = requests.get(
+                f'https://www.kijiji.ca/b-apartments-condos/city-of-toronto/page-{page}/c37l1700273')
         else:
-            response = requests.get(f'https://www.kijiji.ca/b-apartments-condos/city-of-toronto/page-{page}/c37l1700273',
-                                    allow_redirects=False)
+            response = requests.get(
+                f'https://www.kijiji.ca/b-apartments-condos/city-of-toronto/page-{page}/c37l1700273',
+                allow_redirects=False)
         if response.status_code != 200:
             break
 
@@ -35,8 +38,11 @@ if __name__ == '__main__':
 
                 ad_id = ad['data-listing-id']
                 title = ad.find('a', class_='title').text.strip()
-                desc = ad.find('div', class_='description').text.replace("\n", "").strip()
-                city = ad.find('div', class_='location').find("span").text.strip()
+                desc = ad.find(
+                    'div', class_='description').text.replace(
+                    "\n", "").strip()
+                city = ad.find('div', class_='location').find(
+                    "span").text.strip()
 
                 date_raw = ad.find('span', class_='date-posted').text.strip()
                 try:
@@ -45,11 +51,15 @@ if __name__ == '__main__':
                     date = datetime.datetime.today()
 
                 try:
-                    image_url = ad.find('div', class_='image').find('img')['data-src'].strip()
+                    image_url = ad.find('div', class_='image').find('img')[
+                        'data-src'].strip()
                 except KeyError:
-                    image_url = ad.find('div', class_='image').find('img')['src'].strip()
+                    image_url = ad.find(
+                        'div', class_='image').find('img')['src'].strip()
 
-                beds = ad.find('span', class_='bedrooms').text.replace("Beds:", "").strip()
+                beds = ad.find(
+                    'span', class_='bedrooms').text.replace(
+                    "Beds:", "").strip()
 
                 price_raw = ad.find('div', class_='price').text.strip()
 
@@ -62,10 +72,21 @@ if __name__ == '__main__':
                     except ValueError:
                         price = float(price_raw[1:8].replace(',', ''))
 
-                link = 'https://www.kijiji.ca' + ad.find('a', class_='title', href=True)['href'].strip()
+                link = 'https://www.kijiji.ca' + \
+                    ad.find('a', class_='title', href=True)['href'].strip()
 
                 try:
-                    apartment = Apartment(ad_id, title, desc, city, date, image_url, beds, price, price_ccy, link)
+                    apartment = Apartment(
+                        ad_id,
+                        title,
+                        desc,
+                        city,
+                        date,
+                        image_url,
+                        beds,
+                        price,
+                        price_ccy,
+                        link)
                     session.add(apartment)
                     session.commit()
                 except exc.IntegrityError:

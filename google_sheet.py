@@ -7,14 +7,16 @@ from oauth2client.service_account import ServiceAccountCredentials
 import pandas
 
 
-engine = create_engine(f"postgresql://{config.user}:{config.password}@{config.host}:{config.port}/{config.db_name}")
+engine = create_engine(
+    f"postgresql://{config.user}:{config.password}@{config.host}:{config.port}/{config.db_name}")
 
 session = sessionmaker(bind=engine)()
 
 scope = ['https://www.googleapis.com/auth/spreadsheets',
          "https://www.googleapis.com/auth/drive"]
 
-credentials = ServiceAccountCredentials.from_json_keyfile_name("v_credentials.json", scope)
+credentials = ServiceAccountCredentials.from_json_keyfile_name(
+    "v_credentials.json", scope)
 client = gspread.authorize(credentials)
 
 # sheet = client.create("Apartments")
